@@ -93,11 +93,11 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; width: 100
 
 .c-conf { white-space: nowrap; justify-self: start; text-align: left; }
 .thead span:nth-child(1), .thead span:nth-child(2) { justify-self: start; text-align: left; }
-.conf { font-weight: 750; font-size: 1.02rem; letter-spacing: -.01em; color: var(--text); }
+.conf { font-weight: 750; font-size: .9rem; letter-spacing: -.01em; color: var(--text); }
 .conf-link { text-decoration: none; }
 .conf-link:hover { text-decoration: underline; }
 .conf-link:hover .conf, .conf-link:hover .edition { color: var(--accent); }
-.edition { color: var(--text-muted); font-weight: 600; margin-left: 3px; }
+.edition { color: var(--text-muted); font-weight: 600; font-size: .85rem; margin-left: 3px; }
 .conf-cycle { display: inline-block; margin-left: 7px; font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); background: var(--surface-2); padding: 1px 6px; border-radius: 5px; vertical-align: middle; }
 .c-loc, .c-dates { font-size: .83rem; color: var(--text-muted); white-space: nowrap; }
 .c-dl { white-space: nowrap; justify-self: start; text-align: left; }

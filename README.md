@@ -26,10 +26,11 @@ scripts/update_deadlines.py      ← researches CFPs → writes data/conferences
 
 Each week, for every venue, the updater:
 
-1. **Finds the current CFP.** The CFP URL only changes by year between editions
+1. **Finds the editions.** The CFP URL only changes by year between editions
    (`osdi26`→`osdi27`, `fast27`→`fast28`, `asplos2027`→`asplos2028`, …), so it
-   fills the year into the venue's `url_template`, probes the next couple of
-   years, and keeps the newest edition whose page is live.
+   fills the year into the venue's `url_template` and probes a few years —
+   keeping the current edition **and any recent previous edition** whose
+   deadlines fall within the past year (so "All" shows what just happened too).
 2. **Scrapes the submission deadlines** (abstract / paper / registration, with
    time and timezone) and the **conference dates and location** (best-effort:
    the latest multi-day date range on the page, plus a nearby "City, Country"),

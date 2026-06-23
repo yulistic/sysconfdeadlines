@@ -281,7 +281,7 @@ STOP_WORDS = {"where", "when", "welcome", "home", "about", "call", "papers", "pr
 
 def _ranges(text, today):
     """All plausible multi-day date ranges in a block, as (start_date, clean_str)."""
-    lo, hi = today - dt.timedelta(days=120), today + dt.timedelta(days=900)
+    lo, hi = today - dt.timedelta(days=400), today + dt.timedelta(days=900)
     out = []
     for m in RANGE_CROSS.finditer(text):
         mn = MONTH_NUM.get(m.group(1).lower().rstrip("."))
@@ -456,7 +456,8 @@ def fetch(url: str, timeout: int = 25):
 
 
 def probe_years(today: dt.date, biennial_odd: bool):
-    years = list(range(today.year + PROBE_AHEAD, today.year - 1, -1))  # newest first
+    # newest first; include last year so a recently-held edition still appears
+    years = list(range(today.year + PROBE_AHEAD, today.year - 2, -1))
     if biennial_odd:
         years = [y for y in years if y % 2 == 1]
     return years
@@ -467,11 +468,14 @@ def url_for(template: str, year: int):
 
 
 def research_venue(name: str, meta: dict, today: dt.date, log: list):
-    """Return (year, link, deadlines, conf_date, place) from the live CFP, or None."""
+    """Return a list of (year, link, deadlines, conf_date, place): the current
+    edition plus any recent previous edition whose deadlines fall within the past
+    year. Empty list if nothing usable is found."""
     template = meta.get("url_template")
     if not template:
-        return None
-    chosen = None  # (year, url, deadlines, html)
+        return []
+    cutoff = (today - dt.timedelta(days=365)).isoformat()
+    editions = []
     for year in probe_years(today, meta.get("biennial_odd", False)):
         url = url_for(template, year)
         html = fetch(url)
@@ -480,44 +484,37 @@ def research_venue(name: str, meta: dict, today: dt.date, log: list):
         deadlines = extract_deadlines(html, meta.get("timezone", "AoE"), today)
         if not deadlines:
             continue
-        has_future = any(dl["datetime"][:10] >= today.isoformat() for dl in deadlines)
-        log.append(f"  {name}: {url} -> {len(deadlines)} deadline(s)"
-                   f"{' (incl. upcoming)' if has_future else ' (all past)'}")
-        if has_future:
-            chosen = (year, url, deadlines, html)   # newest edition with an open deadline wins
-            break
-        if chosen is None:
-            chosen = (year, url, deadlines, html)   # remember newest live page as backup
-    if not chosen:
-        return None
-    year, url, deadlines, html = chosen
 
-    # Refine with authoritative, exact deadlines from HotCRP submission sites:
-    # seed-configured URLs (templated by year) plus any linked from the CFP.
-    hc_urls = [url_for(t, year) for t in (meta.get("hotcrp") or [])]
-    hc_urls += hotcrp_deadline_urls(html)
-    hc, fetched = {}, set()
-    for hurl in hc_urls:
-        if hurl in fetched:
+        # Authoritative, exact deadlines from HotCRP submission sites for THIS edition:
+        # seed-configured URLs (templated by year) plus any linked from the CFP.
+        hc_urls = [url_for(t, year) for t in (meta.get("hotcrp") or [])]
+        hc_urls += hotcrp_deadline_urls(html)
+        hc, fetched = {}, set()
+        for hurl in hc_urls:
+            if hurl in fetched:
+                continue
+            fetched.add(hurl)
+            hp = fetch(hurl)
+            if hp:
+                for d in parse_hotcrp_deadlines(hp, today):
+                    hc[(d["label"], d["datetime"][:10])] = d
+        if hc:
+            merged = {(d["label"], d["datetime"][:10]): d for d in deadlines}
+            merged.update(hc)                       # HotCRP wins on the same (label, date)
+            deadlines = sorted(merged.values(), key=lambda d: d["datetime"])
+
+        # Skip an edition that is entirely older than a year (the site hides it anyway).
+        if not any(d["datetime"][:10] >= cutoff for d in deadlines):
             continue
-        fetched.add(hurl)
-        hp = fetch(hurl)
-        if hp:
-            for d in parse_hotcrp_deadlines(hp, today):
-                hc[(d["label"], d["datetime"][:10])] = d
-    if hc:
-        merged = {(d["label"], d["datetime"][:10]): d for d in deadlines}
-        merged.update(hc)                       # HotCRP wins on the same (label, date)
-        deadlines = sorted(merged.values(), key=lambda d: d["datetime"])
-        log.append(f"    {name}: merged {len(hc)} HotCRP deadline(s) from {len(fetched)} site(s)")
 
-    home = homepage_url(url)
-    conf_date, place = extract_conf_info([fetch(home) if home else None, html], today)
-    if conf_date:
-        log.append(f"    {name}: conference dates -> {conf_date}")
-    if place:
-        log.append(f"    {name}: place -> {place}")
-    return (year, url, deadlines, conf_date, place)
+        home = homepage_url(url)
+        conf_date, place = extract_conf_info([fetch(home) if home else None, html], today)
+        log.append(f"  {name} {year}: {len(deadlines)} deadline(s)"
+                   + (f", merged {len(hc)} HotCRP" if hc else "")
+                   + (f" -> {conf_date}" if conf_date else "")
+                   + (f" @ {place}" if place else ""))
+        editions.append((year, url, deadlines, conf_date, place))
+    return editions
 
 
 # ------------------------------------------------------------------- build ----
@@ -570,20 +567,17 @@ def main():
 
     cards = []
     for name, meta in venues.items():
-        card = None
+        venue_cards = []
         if not args.offline:
             try:
-                res = research_venue(name, meta, today, log)
+                for (year, link, deadlines, conf_date, place) in research_venue(name, meta, today, log):
+                    venue_cards.append(card_from_scrape(name, meta, year, link, deadlines, conf_date, place))
             except Exception as e:  # noqa: BLE001 - never let one venue break the run
-                res = None
                 log.append(f"  {name}: ERROR {e}")
-            if res:
-                year, link, deadlines, conf_date, place = res
-                card = card_from_scrape(name, meta, year, link, deadlines, conf_date, place)
-        if card is None:
-            card = card_from_fallback(name, meta)
+        if not venue_cards:
+            venue_cards = [card_from_fallback(name, meta)]
             log.append(f"  {name}: using curated fallback")
-        cards.append(card)
+        cards.extend(venue_cards)
 
     cards.sort(key=lambda c: (c["primary_utc"] is None, c["primary_utc"] or ""))
     all_tags = sorted({t for c in cards for t in c["tags"]})
