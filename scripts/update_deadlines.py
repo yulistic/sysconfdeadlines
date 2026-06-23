@@ -242,9 +242,11 @@ def extract_deadlines(html: str, default_tz: str, today: dt.date):
 # --- conference date / place extraction (best-effort; falls back to seed) ----
 MONTH_ALT = (r"(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
              r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)")
-RANGE_SAME = re.compile(MONTH_ALT + r"\.?\s+(\d{1,2})\s*[–—\-]\s*(\d{1,2}),?\s+(\d{4})", re.I)
-RANGE_CROSS = re.compile(MONTH_ALT + r"\.?\s+(\d{1,2})\s*[–—\-]\s*"
-                         + MONTH_ALT + r"\.?\s+(\d{1,2}),?\s+(\d{4})", re.I)
+RANGE_SAME = re.compile(
+    MONTH_ALT + r"\.?\s+(\d{1,2})(?:st|nd|rd|th)?\s*[–—\-]\s*(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})", re.I)
+RANGE_CROSS = re.compile(
+    MONTH_ALT + r"\.?\s+(\d{1,2})(?:st|nd|rd|th)?\s*[–—\-]\s*"
+    + MONTH_ALT + r"\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})", re.I)
 # A run of 2–4 comma-separated capitalised phrases, e.g. "Renton, WA, USA",
 # "Heraklion, Crete, Greece", "Hyatt Hotel, Shatin, Hong Kong".
 LOC_SEQ = re.compile(r"[A-Z][A-Za-z\-']+(?:\s+[A-Z][A-Za-z\-']+)*"
@@ -357,6 +359,12 @@ def extract_conf_info(htmls, today):
             for j in (best[2], best[2] + 1, best[2] - 1, best[2] + 2):
                 if 0 <= j < len(blocks):
                     found = _place_in(blocks[j])
+                    if found:
+                        place = found
+                        break
+            if place is None:                       # fall back to anywhere on the page
+                for b in blocks:
+                    found = _place_in(b)
                     if found:
                         place = found
                         break
