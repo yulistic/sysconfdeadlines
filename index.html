@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Systems Conference Deadlines</title>
+  <meta name="description" content="Live submission deadlines and countdowns for top systems conferences: SOSP, OSDI, ASPLOS, USENIX ATC, EuroSys, FAST, NSDI, HotOS, HotStorage." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏰</text></svg>" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-row">
+      <div class="title-block">
+        <h1>⏰ Systems Conference Deadlines</h1>
+        <p class="subtitle">Submission deadlines for top systems venues — counts down in <strong>AoE</strong> (Anywhere on Earth).</p>
+      </div>
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+    </div>
+
+    <div class="controls">
+      <input id="search" type="search" class="search" placeholder="Search venue, location…" aria-label="Search conferences" autocomplete="off" />
+      <div class="view-toggle" role="tablist" aria-label="Filter by time">
+        <button class="seg active" data-view="upcoming" role="tab">Upcoming</button>
+        <button class="seg" data-view="past" role="tab">Past</button>
+        <button class="seg" data-view="all" role="tab">All</button>
+      </div>
+    </div>
+    <div id="tag-bar" class="tag-bar" aria-label="Filter by topic"></div>
+  </header>
+
+  <main>
+    <div id="grid" class="grid" aria-live="polite"></div>
+    <p id="empty" class="empty" hidden>No conferences match your filters.</p>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Auto-updated <span id="generated">—</span> ·
+      Data: curated seed +
+      <a href="https://github.com/ccfddl/ccf-deadlines" target="_blank" rel="noopener">ccfddl</a> ·
+      Always verify against the official Call for Papers.
+    </p>
+  </footer>
+
+  <script src="./assets/app.js"></script>
+</body>
+</html>

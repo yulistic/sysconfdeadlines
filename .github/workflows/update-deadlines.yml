@@ -1,0 +1,53 @@
+name: Update deadlines
+
+# Periodically rebuild data/conferences.json from the curated seed + the
+# community-maintained ccfddl dataset, and commit it if anything changed.
+# GitHub Pages (deploy from the main branch) then re-publishes automatically.
+
+on:
+  schedule:
+    - cron: "0 6 * * *"      # every day at 06:00 UTC
+  workflow_dispatch: {}        # allow manual "Run workflow"
+  push:
+    paths:
+      - "scripts/conferences.seed.yml"
+      - "scripts/update_deadlines.py"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-deadlines
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Verify timezone math
+        run: python scripts/update_deadlines.py --selftest
+
+      - name: Rebuild deadline data
+        run: python scripts/update_deadlines.py
+
+      - name: Commit changes if any
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/conferences.json
+          if git diff --staged --quiet; then
+            echo "No deadline changes."
+          else
+            git commit -m "chore: auto-update conference deadlines [skip ci]"
+            git push
+          fi

@@ -1,0 +1,310 @@
+{
+  "generated": "2026-06-22T22:40:46Z",
+  "source": "scripts/conferences.seed.yml + ccfddl (best-effort)",
+  "tags": [
+    "Architecture",
+    "Networking",
+    "OS",
+    "Storage",
+    "Workshop"
+  ],
+  "conferences": [
+    {
+      "id": "osdi-26",
+      "conf": "OSDI",
+      "edition": "'26",
+      "full_name": "USENIX Symposium on Operating Systems Design and Implementation",
+      "tags": [
+        "OS"
+      ],
+      "place": "Seattle, WA, USA",
+      "date": "July 13-15, 2026",
+      "link": "https://www.usenix.org/conference/osdi26/call-for-papers",
+      "timezone": "EST",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2025-12-04T22:59:00Z",
+          "display": "Dec 4, 2025, 17:59 EST"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-12-11T22:59:00Z",
+          "display": "Dec 11, 2025, 17:59 EST"
+        }
+      ],
+      "primary_utc": "2025-12-11T22:59:00Z"
+    },
+    {
+      "id": "fast-27-spring",
+      "conf": "FAST",
+      "edition": "'27 (Spring)",
+      "full_name": "USENIX Conference on File and Storage Technologies",
+      "tags": [
+        "Storage"
+      ],
+      "place": "Renton, WA, USA",
+      "date": "February 23-25, 2027",
+      "link": "https://www.usenix.org/conference/fast27/call-for-papers",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Paper",
+          "utc": "2026-03-18T11:59:59Z",
+          "display": "Mar 17, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-03-18T11:59:59Z"
+    },
+    {
+      "id": "sosp-2026",
+      "conf": "SOSP",
+      "edition": "2026",
+      "full_name": "ACM Symposium on Operating Systems Principles",
+      "tags": [
+        "OS"
+      ],
+      "place": "Prague, Czechia",
+      "date": "Sept 29 - Oct 2, 2026",
+      "link": "https://sigops.org/s/conferences/sosp/2026/cfp.html",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2026-03-27T11:59:59Z",
+          "display": "Mar 26, 2026, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2026-04-02T11:59:59Z",
+          "display": "Apr 1, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-04-02T11:59:59Z"
+    },
+    {
+      "id": "asplos-27-apr-cycle",
+      "conf": "ASPLOS",
+      "edition": "'27 (Apr cycle)",
+      "full_name": "ACM International Conference on Architectural Support for Programming Languages and Operating Systems",
+      "tags": [
+        "Architecture",
+        "OS"
+      ],
+      "place": "Heraklion, Crete, Greece",
+      "date": "April 11-15, 2027",
+      "link": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Paper",
+          "utc": "2026-04-16T11:59:59Z",
+          "display": "Apr 15, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-04-16T11:59:59Z"
+    },
+    {
+      "id": "nsdi-27-spring",
+      "conf": "NSDI",
+      "edition": "'27 (Spring)",
+      "full_name": "USENIX Symposium on Networked Systems Design and Implementation",
+      "tags": [
+        "Networking"
+      ],
+      "place": "Providence, RI, USA",
+      "date": "May 11-13, 2027",
+      "link": "https://www.usenix.org/conference/nsdi27/call-for-papers",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2026-04-24T11:59:59Z",
+          "display": "Apr 23, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-04-24T11:59:59Z"
+    },
+    {
+      "id": "eurosys-27-spring",
+      "conf": "EuroSys",
+      "edition": "'27 (Spring)",
+      "full_name": "European Conference on Computer Systems",
+      "tags": [
+        "OS"
+      ],
+      "place": "Rabat, Morocco",
+      "date": "April 2027",
+      "link": "https://2027.eurosys.org/cfp.html",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2026-05-08T11:59:59Z",
+          "display": "May 7, 2026, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2026-05-15T11:59:59Z",
+          "display": "May 14, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-05-15T11:59:59Z"
+    },
+    {
+      "id": "usenix-atc-2026",
+      "conf": "USENIX ATC",
+      "edition": "2026",
+      "full_name": "ACM SIGOPS Annual Technical Conference",
+      "tags": [
+        "OS"
+      ],
+      "place": "TBA",
+      "date": "November 16-18, 2026",
+      "link": "https://sigops.org/s/conferences/atc/2026/cfp.html",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Submission",
+          "utc": "2026-06-11T11:59:59Z",
+          "display": "Jun 10, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-06-11T11:59:59Z"
+    },
+    {
+      "id": "hotstorage-26",
+      "conf": "HotStorage",
+      "edition": "'26",
+      "full_name": "ACM Workshop on Hot Topics in Storage and File Systems",
+      "tags": [
+        "Storage",
+        "Workshop"
+      ],
+      "place": "Prague, Czechia",
+      "date": "September 28-29, 2026",
+      "link": "https://www.sigarch.org/call-contributions/hotstorage-sosp-2026/",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Submission",
+          "utc": "2026-06-13T11:59:59Z",
+          "display": "Jun 12, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-06-13T11:59:59Z"
+    },
+    {
+      "id": "asplos-27-sep-cycle",
+      "conf": "ASPLOS",
+      "edition": "'27 (Sep cycle)",
+      "full_name": "ACM International Conference on Architectural Support for Programming Languages and Operating Systems",
+      "tags": [
+        "Architecture",
+        "OS"
+      ],
+      "place": "Heraklion, Crete, Greece",
+      "date": "April 11-15, 2027",
+      "link": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Paper",
+          "utc": "2026-09-10T11:59:59Z",
+          "display": "Sep 9, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-09-10T11:59:59Z"
+    },
+    {
+      "id": "fast-27-fall",
+      "conf": "FAST",
+      "edition": "'27 (Fall)",
+      "full_name": "USENIX Conference on File and Storage Technologies",
+      "tags": [
+        "Storage"
+      ],
+      "place": "Renton, WA, USA",
+      "date": "February 23-25, 2027",
+      "link": "https://www.usenix.org/conference/fast27/call-for-papers",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Paper",
+          "utc": "2026-09-16T11:59:59Z",
+          "display": "Sep 15, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-09-16T11:59:59Z"
+    },
+    {
+      "id": "eurosys-27-fall",
+      "conf": "EuroSys",
+      "edition": "'27 (Fall)",
+      "full_name": "European Conference on Computer Systems",
+      "tags": [
+        "OS"
+      ],
+      "place": "Rabat, Morocco",
+      "date": "April 2027",
+      "link": "https://2027.eurosys.org/cfp.html",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Paper",
+          "utc": "2026-09-18T11:59:59Z",
+          "display": "Sep 17, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-09-18T11:59:59Z"
+    },
+    {
+      "id": "nsdi-27-fall",
+      "conf": "NSDI",
+      "edition": "'27 (Fall)",
+      "full_name": "USENIX Symposium on Networked Systems Design and Implementation",
+      "tags": [
+        "Networking"
+      ],
+      "place": "Providence, RI, USA",
+      "date": "May 11-13, 2027",
+      "link": "https://www.usenix.org/conference/nsdi27/call-for-papers",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2026-09-11T11:59:59Z",
+          "display": "Sep 10, 2026, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2026-09-18T11:59:59Z",
+          "display": "Sep 17, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-09-18T11:59:59Z"
+    },
+    {
+      "id": "hotos-2027-xxi",
+      "conf": "HotOS",
+      "edition": "2027 (XXI)",
+      "full_name": "ACM SIGOPS Workshop on Hot Topics in Operating Systems",
+      "tags": [
+        "OS",
+        "Workshop"
+      ],
+      "place": "Burghausen, Bavaria, Germany",
+      "date": "May 24-26, 2027",
+      "link": "https://sigops.org/s/conferences/hotos/2027/cfp.html",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Paper",
+          "utc": null,
+          "display": "TBD"
+        }
+      ],
+      "primary_utc": null
+    }
+  ]
+}

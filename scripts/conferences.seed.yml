@@ -1,0 +1,166 @@
+# =============================================================================
+# Seed data for systems-conference deadlines.
+#
+# This file is the human-editable source of truth. To add or fix a deadline,
+# edit it here and re-run scripts/update_deadlines.py (or let the GitHub Action
+# do it). Times are LOCAL wall-clock for the given `timezone`; the build script
+# converts them to absolute UTC for the website.
+#
+# timezone:  AoE (UTC-12, no DST) | UTC-12..UTC+14 | EST | EDT | PST | PDT | PT
+# datetime:  "YYYY-MM-DD HH:MM:SS"  (or "TBD" if not announced yet)
+#
+# For venues with a `ccfddl:` path, the updater will refresh their editions from
+# the community-maintained ccfddl dataset when it can reach it, and fall back to
+# the editions below otherwise. HotOS / HotStorage are maintained here only.
+# =============================================================================
+
+venues:
+
+  OSDI:
+    full_name: USENIX Symposium on Operating Systems Design and Implementation
+    tags: [OS]
+    ccfddl: SC/osdi.yml
+    editions:
+      - edition: "'26"
+        place: "Seattle, WA, USA"
+        date: "July 13-15, 2026"
+        link: "https://www.usenix.org/conference/osdi26/call-for-papers"
+        timezone: EST
+        deadlines:
+          - { label: Abstract, datetime: "2025-12-04 17:59:00" }
+          - { label: Paper,    datetime: "2025-12-11 17:59:00" }
+
+  SOSP:
+    full_name: ACM Symposium on Operating Systems Principles
+    tags: [OS]
+    ccfddl: SC/sosp.yml
+    editions:
+      - edition: "2026"
+        place: "Prague, Czechia"
+        date: "Sept 29 - Oct 2, 2026"
+        link: "https://sigops.org/s/conferences/sosp/2026/cfp.html"
+        timezone: AoE
+        deadlines:
+          - { label: Abstract, datetime: "2026-03-26 23:59:59" }
+          - { label: Paper,    datetime: "2026-04-01 23:59:59" }
+
+  ASPLOS:
+    full_name: ACM International Conference on Architectural Support for Programming Languages and Operating Systems
+    tags: [Architecture, OS]
+    ccfddl: SC/asplos.yml
+    editions:
+      - edition: "'27 (Apr cycle)"
+        place: "Heraklion, Crete, Greece"
+        date: "April 11-15, 2027"
+        link: "https://www.asplos-conference.org/asplos2027/cfp/"
+        timezone: AoE
+        deadlines:
+          - { label: Paper, datetime: "2026-04-15 23:59:59" }
+      - edition: "'27 (Sep cycle)"
+        place: "Heraklion, Crete, Greece"
+        date: "April 11-15, 2027"
+        link: "https://www.asplos-conference.org/asplos2027/cfp/"
+        timezone: AoE
+        deadlines:
+          - { label: Paper, datetime: "2026-09-09 23:59:59" }
+
+  USENIX ATC:
+    full_name: ACM SIGOPS Annual Technical Conference
+    tags: [OS]
+    ccfddl: SC/atc.yml
+    editions:
+      - edition: "2026"
+        place: "TBA"
+        date: "November 16-18, 2026"
+        link: "https://sigops.org/s/conferences/atc/2026/cfp.html"
+        timezone: AoE
+        deadlines:
+          - { label: Submission, datetime: "2026-06-10 23:59:59" }
+
+  EuroSys:
+    full_name: European Conference on Computer Systems
+    tags: [OS]
+    ccfddl: SC/eurosys.yml
+    editions:
+      - edition: "'27 (Spring)"
+        place: "Rabat, Morocco"
+        date: "April 2027"
+        link: "https://2027.eurosys.org/cfp.html"
+        timezone: AoE
+        deadlines:
+          - { label: Abstract, datetime: "2026-05-07 23:59:59" }
+          - { label: Paper,    datetime: "2026-05-14 23:59:59" }
+      - edition: "'27 (Fall)"
+        place: "Rabat, Morocco"
+        date: "April 2027"
+        link: "https://2027.eurosys.org/cfp.html"
+        timezone: AoE
+        deadlines:
+          - { label: Paper, datetime: "2026-09-17 23:59:59" }
+
+  FAST:
+    full_name: USENIX Conference on File and Storage Technologies
+    tags: [Storage]
+    ccfddl: SC/fast.yml
+    editions:
+      - edition: "'27 (Spring)"
+        place: "Renton, WA, USA"
+        date: "February 23-25, 2027"
+        link: "https://www.usenix.org/conference/fast27/call-for-papers"
+        timezone: AoE
+        deadlines:
+          - { label: Paper, datetime: "2026-03-17 23:59:59" }
+      - edition: "'27 (Fall)"
+        place: "Renton, WA, USA"
+        date: "February 23-25, 2027"
+        link: "https://www.usenix.org/conference/fast27/call-for-papers"
+        timezone: AoE
+        deadlines:
+          - { label: Paper, datetime: "2026-09-15 23:59:59" }
+
+  NSDI:
+    full_name: USENIX Symposium on Networked Systems Design and Implementation
+    tags: [Networking]
+    ccfddl: NW/nsdi.yml
+    editions:
+      - edition: "'27 (Spring)"
+        place: "Providence, RI, USA"
+        date: "May 11-13, 2027"
+        link: "https://www.usenix.org/conference/nsdi27/call-for-papers"
+        timezone: AoE
+        deadlines:
+          - { label: Abstract, datetime: "2026-04-23 23:59:59" }
+      - edition: "'27 (Fall)"
+        place: "Providence, RI, USA"
+        date: "May 11-13, 2027"
+        link: "https://www.usenix.org/conference/nsdi27/call-for-papers"
+        timezone: AoE
+        deadlines:
+          - { label: Abstract, datetime: "2026-09-10 23:59:59" }
+          - { label: Paper,    datetime: "2026-09-17 23:59:59" }
+
+  HotOS:
+    full_name: ACM SIGOPS Workshop on Hot Topics in Operating Systems
+    tags: [OS, Workshop]
+    ccfddl: null
+    editions:
+      - edition: "2027 (XXI)"
+        place: "Burghausen, Bavaria, Germany"
+        date: "May 24-26, 2027"
+        link: "https://sigops.org/s/conferences/hotos/2027/cfp.html"
+        timezone: AoE
+        deadlines:
+          - { label: Paper, datetime: "TBD" }
+
+  HotStorage:
+    full_name: ACM Workshop on Hot Topics in Storage and File Systems
+    tags: [Storage, Workshop]
+    ccfddl: null
+    editions:
+      - edition: "'26"
+        place: "Prague, Czechia"
+        date: "September 28-29, 2026"
+        link: "https://www.sigarch.org/call-contributions/hotstorage-sosp-2026/"
+        timezone: AoE
+        deadlines:
+          - { label: Submission, datetime: "2026-06-12 23:59:59" }
