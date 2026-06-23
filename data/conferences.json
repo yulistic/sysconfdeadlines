@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-23T05:33:15Z",
+  "generated": "2026-06-23T05:51:26Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -9,44 +9,6 @@
     "Workshop"
   ],
   "conferences": [
-    {
-      "id": "asplos-28",
-      "conf": "ASPLOS",
-      "edition": "'28",
-      "full_name": "ACM Intl. Conference on Architectural Support for Programming Languages and Operating Systems",
-      "tags": [
-        "Architecture",
-        "OS"
-      ],
-      "place": "Pittsburgh, USA",
-      "date": "March 22-26, 2026",
-      "link": "https://www.asplos-conference.org/asplos2028/cfp/",
-      "homepage": "https://www.asplos-conference.org/asplos2028/",
-      "timezone": "AoE",
-      "deadlines": [
-        {
-          "label": "Abstract",
-          "utc": "2025-03-06T11:59:00Z",
-          "display": "Mar 5, 2025, 23:59 AoE"
-        },
-        {
-          "label": "Paper",
-          "utc": "2025-03-13T11:59:59Z",
-          "display": "Mar 12, 2025, 23:59 AoE"
-        },
-        {
-          "label": "Abstract",
-          "utc": "2025-08-14T11:59:59Z",
-          "display": "Aug 13, 2025, 23:59 AoE"
-        },
-        {
-          "label": "Paper",
-          "utc": "2025-08-21T11:59:59Z",
-          "display": "Aug 20, 2025, 23:59 AoE"
-        }
-      ],
-      "primary_utc": "2025-08-21T11:59:59Z"
-    },
     {
       "id": "asplos-26",
       "conf": "ASPLOS",
