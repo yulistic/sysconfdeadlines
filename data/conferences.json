@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-23T00:22:03Z",
+  "generated": "2026-06-23T00:33:45Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -75,7 +75,7 @@
       "timezone": "AoE",
       "deadlines": [
         {
-          "label": "Submission",
+          "label": "Paper",
           "utc": "2026-06-11T11:59:59Z",
           "display": "Jun 10, 2026, 23:59 AoE"
         }
@@ -158,37 +158,6 @@
       "primary_utc": "2026-09-16T11:59:59Z"
     },
     {
-      "id": "eurosys-27",
-      "conf": "EuroSys",
-      "edition": "'27",
-      "full_name": "European Conference on Computer Systems",
-      "tags": [
-        "OS"
-      ],
-      "place": "Rabat, Morocco",
-      "date": "April 2027",
-      "link": "https://2027.eurosys.org/cfp.html",
-      "timezone": "AoE",
-      "deadlines": [
-        {
-          "label": "Abstract",
-          "utc": "2026-05-08T11:59:59Z",
-          "display": "May 7, 2026, 23:59 AoE"
-        },
-        {
-          "label": "Paper",
-          "utc": "2026-05-15T11:59:59Z",
-          "display": "May 14, 2026, 23:59 AoE"
-        },
-        {
-          "label": "Paper",
-          "utc": "2026-09-18T11:59:59Z",
-          "display": "Sep 17, 2026, 23:59 AoE"
-        }
-      ],
-      "primary_utc": "2026-09-18T11:59:59Z"
-    },
-    {
       "id": "nsdi-27",
       "conf": "NSDI",
       "edition": "'27",
@@ -218,6 +187,42 @@
         }
       ],
       "primary_utc": "2026-09-18T11:59:59Z"
+    },
+    {
+      "id": "eurosys-27",
+      "conf": "EuroSys",
+      "edition": "'27",
+      "full_name": "European Conference on Computer Systems",
+      "tags": [
+        "OS"
+      ],
+      "place": "Rabat, Morocco",
+      "date": "April 2027",
+      "link": "https://2027.eurosys.org/cfp.html",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2026-05-08T11:59:59Z",
+          "display": "May 7, 2026, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2026-05-15T11:59:59Z",
+          "display": "May 14, 2026, 23:59 AoE"
+        },
+        {
+          "label": "Abstract",
+          "utc": "2026-09-18T11:59:59Z",
+          "display": "Sep 17, 2026, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2026-09-25T11:59:59Z",
+          "display": "Sep 24, 2026, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2026-09-25T11:59:59Z"
     },
     {
       "id": "hotos-2027",
