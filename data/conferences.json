@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-23T05:51:26Z",
+  "generated": "2026-06-23T06:15:51Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -55,8 +55,8 @@
       "tags": [
         "OS"
       ],
-      "place": "TBA",
-      "date": "2026",
+      "place": "Edinburgh, UK",
+      "date": "April 27-30, 2026",
       "link": "https://2026.eurosys.org/cfp.html",
       "homepage": "https://2026.eurosys.org/index.html",
       "timezone": "AoE",
@@ -120,7 +120,7 @@
         "OS"
       ],
       "place": "Prague, Czechia",
-      "date": "Sept 29 - Oct 2, 2026",
+      "date": "September 29 - October 2, 2026",
       "link": "https://sigops.org/s/conferences/sosp/2026/cfp.html",
       "homepage": "https://sigops.org/s/conferences/sosp/2026/index.html",
       "timezone": "AoE",
