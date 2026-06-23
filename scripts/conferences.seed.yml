@@ -20,6 +20,7 @@ venues:
     full_name: USENIX Symposium on Operating Systems Design and Implementation
     tags: [OS]
     url_template: "https://www.usenix.org/conference/osdi{yy}/call-for-papers"
+    hotcrp: ["https://osdi{yy}.usenix.hotcrp.com/deadlines"]
     timezone: AoE
     fallback:
       year: 2026
@@ -36,6 +37,7 @@ venues:
     full_name: ACM Symposium on Operating Systems Principles
     tags: [OS]
     url_template: "https://sigops.org/s/conferences/sosp/{yyyy}/cfp.html"
+    hotcrp: ["https://sosp{yy}.hotcrp.com/deadlines"]
     timezone: AoE
     fallback:
       year: 2026
@@ -52,6 +54,7 @@ venues:
     full_name: ACM Intl. Conference on Architectural Support for Programming Languages and Operating Systems
     tags: [Architecture, OS]
     url_template: "https://www.asplos-conference.org/asplos{yyyy}/cfp/"
+    hotcrp: ["https://asplos{yy}spring.hotcrp.com/deadlines", "https://asplos{yy}fall.hotcrp.com/deadlines"]
     timezone: AoE
     fallback:
       year: 2027
@@ -68,12 +71,13 @@ venues:
     full_name: ACM SIGOPS Annual Technical Conference
     tags: [OS]
     url_template: "https://sigops.org/s/conferences/atc/{yyyy}/cfp.html"
+    hotcrp: ["https://atc{yy}.hotcrp.com/deadlines"]
     timezone: AoE
     fallback:
       year: 2026
       edition: "2026"
-      place: "TBA"
-      date: "November 16-18, 2026"
+      place: "Shatin, Hong Kong"
+      date: "November 15-18, 2026"
       link: "https://sigops.org/s/conferences/atc/2026/cfp.html"
       timezone: AoE
       deadlines:
@@ -83,23 +87,26 @@ venues:
     full_name: European Conference on Computer Systems
     tags: [OS]
     url_template: "https://{yyyy}.eurosys.org/cfp.html"
+    hotcrp: ["https://eurosys{yy}-spring.hotcrp.com/deadlines", "https://eurosys{yy}-fall.hotcrp.com/deadlines"]
     timezone: AoE
     fallback:
       year: 2027
       edition: "'27"
       place: "Rabat, Morocco"
-      date: "April 2027"
+      date: "April 19-23, 2027"
       link: "https://2027.eurosys.org/cfp.html"
       timezone: AoE
       deadlines:
         - { label: Abstract, datetime: "2026-05-07 23:59:59" }
         - { label: Paper,    datetime: "2026-05-14 23:59:59" }
-        - { label: Paper,    datetime: "2026-09-17 23:59:59" }
+        - { label: Abstract, datetime: "2026-09-17 23:59:59" }
+        - { label: Paper,    datetime: "2026-09-24 23:59:59" }
 
   FAST:
     full_name: USENIX Conference on File and Storage Technologies
     tags: [Storage]
     url_template: "https://www.usenix.org/conference/fast{yy}/call-for-papers"
+    hotcrp: ["https://fast{yy}spring.usenix.hotcrp.com/deadlines", "https://fast{yy}fall.usenix.hotcrp.com/deadlines"]
     timezone: AoE
     fallback:
       year: 2027
@@ -116,6 +123,7 @@ venues:
     full_name: USENIX Symposium on Networked Systems Design and Implementation
     tags: [Networking]
     url_template: "https://www.usenix.org/conference/nsdi{yy}/call-for-papers"
+    hotcrp: ["https://nsdi{yy}spring.usenix.hotcrp.com/deadlines", "https://nsdi{yy}fall.usenix.hotcrp.com/deadlines"]
     timezone: AoE
     fallback:
       year: 2027
@@ -125,7 +133,8 @@ venues:
       link: "https://www.usenix.org/conference/nsdi27/call-for-papers"
       timezone: AoE
       deadlines:
-        - { label: Abstract, datetime: "2026-04-23 23:59:59" }
+        - { label: Abstract, datetime: "2026-04-16 23:59:59" }
+        - { label: Paper,    datetime: "2026-04-23 23:59:59" }
         - { label: Abstract, datetime: "2026-09-10 23:59:59" }
         - { label: Paper,    datetime: "2026-09-17 23:59:59" }
 
@@ -133,6 +142,7 @@ venues:
     full_name: ACM SIGOPS Workshop on Hot Topics in Operating Systems
     tags: [OS, Workshop]
     url_template: "https://sigops.org/s/conferences/hotos/{yyyy}/cfp.html"
+    hotcrp: ["https://hotos{yy}.hotcrp.com/deadlines"]
     timezone: AoE
     biennial_odd: true        # HotOS happens in odd years only
     fallback:
@@ -149,6 +159,7 @@ venues:
     full_name: ACM Workshop on Hot Topics in Storage and File Systems
     tags: [Storage, Workshop]
     url_template: "https://www.hotstorage.org/{yyyy}/cfp.html"
+    hotcrp: ["https://hotstorage{yy}.hotcrp.com/deadlines"]
     timezone: AoE
     fallback:
       year: 2026

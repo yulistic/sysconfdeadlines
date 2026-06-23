@@ -114,6 +114,21 @@ def to_utc(datetime_str: str, tz: str):
     return iso, display
 
 
+def _local_to_utc(local, tz):
+    kind, val = parse_tz(tz)
+    if kind == "fixed":
+        return (local - dt.timedelta(minutes=val)).replace(tzinfo=UTC)
+    return local.replace(tzinfo=val).astimezone(UTC)
+
+
+def _utc_to_local(utc, tz):
+    """Inverse of _local_to_utc: render a UTC instant as wall-clock in `tz`."""
+    kind, val = parse_tz(tz)
+    if kind == "fixed":
+        return utc.replace(tzinfo=None) + dt.timedelta(minutes=val)
+    return utc.astimezone(val).replace(tzinfo=None)
+
+
 # ----------------------------------------------------------------- scraping ---
 DATE_RE = re.compile(
     r"\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|"
@@ -224,6 +239,208 @@ def extract_deadlines(html: str, default_tz: str, today: dt.date):
     return out
 
 
+# --- conference date / place extraction (best-effort; falls back to seed) ----
+MONTH_ALT = (r"(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
+             r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)")
+RANGE_SAME = re.compile(MONTH_ALT + r"\.?\s+(\d{1,2})\s*[–—\-]\s*(\d{1,2}),?\s+(\d{4})", re.I)
+RANGE_CROSS = re.compile(MONTH_ALT + r"\.?\s+(\d{1,2})\s*[–—\-]\s*"
+                         + MONTH_ALT + r"\.?\s+(\d{1,2}),?\s+(\d{4})", re.I)
+# A run of 2–4 comma-separated capitalised phrases, e.g. "Renton, WA, USA",
+# "Heraklion, Crete, Greece", "Hyatt Hotel, Shatin, Hong Kong".
+LOC_SEQ = re.compile(r"[A-Z][A-Za-z\-']+(?:\s+[A-Z][A-Za-z\-']+)*"
+                     r"(?:,\s+[A-Z][A-Za-z\-']+(?:\s+[A-Z][A-Za-z\-']+)*){1,3}")
+# Leading venue components to strip ("Hyatt Hotel, Shatin, Hong Kong" -> "Shatin, Hong Kong").
+VENUE_WORDS = {"hotel", "regency", "hyatt", "marriott", "hilton", "westin", "sheraton",
+               "center", "centre", "convention", "resort", "inn", "plaza", "palace",
+               "ballroom", "campus", "building", "hall", "conference"}
+# Components that mean this isn't a place at all.
+BAD_WORDS = {"committee", "university", "institute", "conference", "symposium", "workshop",
+             "program", "proceedings", "department", "call", "paper", "papers", "association",
+             "computing", "track", "session", "chair", "school", "society", "sponsored"}
+
+
+def _words(s):
+    return set(re.findall(r"[a-z]+", s.lower()))
+
+
+def _page_text(html):
+    soup = BeautifulSoup(html, "html.parser")
+    for t in soup(["script", "style"]):
+        t.decompose()
+    return re.sub(r"\s+", " ", soup.get_text(" "))
+
+
+MONTH_WORDS = set()
+for _m in "january february march april may june july august september october november december".split():
+    MONTH_WORDS.update({_m, _m[:3]})
+MONTH_WORDS.add("sept")
+STOP_WORDS = {"where", "when", "welcome", "home", "about", "call", "papers", "program",
+              "sponsored", "menu", "contact", "organizers", "attend", "participate",
+              "venue", "news", "register", "registration", "hotel", "deadline"}
+
+
+def _ranges(text, today):
+    """All plausible multi-day date ranges in a block, as (start_date, clean_str)."""
+    lo, hi = today - dt.timedelta(days=120), today + dt.timedelta(days=900)
+    out = []
+    for m in RANGE_CROSS.finditer(text):
+        mn = MONTH_NUM.get(m.group(1).lower().rstrip("."))
+        if mn:
+            try:
+                sd = dt.date(int(m.group(5)), mn, int(m.group(2)))
+            except ValueError:
+                continue
+            if lo <= sd <= hi:
+                out.append((sd, f"{m.group(1).capitalize()} {int(m.group(2))} - {m.group(3).capitalize()} {int(m.group(4))}, {m.group(5)}"))
+    for m in RANGE_SAME.finditer(text):
+        mn = MONTH_NUM.get(m.group(1).lower().rstrip("."))
+        if mn:
+            try:
+                sd = dt.date(int(m.group(4)), mn, int(m.group(2)))
+            except ValueError:
+                continue
+            if lo <= sd <= hi:
+                out.append((sd, f"{m.group(1).capitalize()} {int(m.group(2))}-{int(m.group(3))}, {m.group(4)}"))
+    return out
+
+
+def _clean_part(p):
+    """Trim a place component at a month name, heading word, or year."""
+    kept = []
+    for w in p.split():
+        lw = re.sub(r"[^a-z]", "", w.lower())
+        if not lw or lw in MONTH_WORDS or lw in STOP_WORDS or re.fullmatch(r"\d{4}", w):
+            break
+        kept.append(w)
+    return " ".join(kept).strip(" ,.")
+
+
+def _place_in(text):
+    """Find 'City, Region/Country' in a single block, skipping venue names."""
+    for m in LOC_SEQ.finditer(text):
+        parts = [_clean_part(p.strip()) for p in m.group(0).split(",")]
+        parts = [p for p in parts if p]
+        while parts and (_words(parts[0]) & VENUE_WORDS):       # drop leading venue names
+            parts.pop(0)
+        parts = [p for p in parts if not (_words(p) & BAD_WORDS)]
+        if len(parts) >= 2:
+            place = ", ".join(parts[:3])
+            if 4 <= len(place) <= 46:
+                return place
+    return None
+
+
+def extract_conf_info(htmls, today):
+    """Return (conference_date_str, place_str), best-effort, or (None, None).
+
+    Works block by block (so a place can't bleed across a heading) and prefers the
+    latest multi-day date range on the page — that's the conference, not a deadline."""
+    date, place = None, None
+    for html in htmls:
+        if not html:
+            continue
+        soup = BeautifulSoup(html, "html.parser")
+        for t in soup(["script", "style"]):
+            t.decompose()
+        blocks = [re.sub(r"\s+", " ", b).strip() for b in soup.get_text("\n").split("\n")]
+        blocks = [b for b in blocks if b]
+        best = None  # (start_date, clean, block_index)
+        for i, b in enumerate(blocks):
+            for sd, clean in _ranges(b, today):
+                if best is None or sd > best[0]:
+                    best = (sd, clean, i)
+        if not best:
+            continue
+        if date is None:
+            date = best[1]
+        if place is None:
+            for j in (best[2], best[2] + 1, best[2] - 1, best[2] + 2):
+                if 0 <= j < len(blocks):
+                    found = _place_in(blocks[j])
+                    if found:
+                        place = found
+                        break
+        if date and place:
+            break
+    return date, place
+
+
+# --- HotCRP: most systems CFPs link to a *.hotcrp.com submission site whose
+#     /deadlines page is server-rendered and authoritative (exact time + tz). ---
+HOTCRP_LINK = re.compile(r"https?://([A-Za-z0-9.\-]+\.hotcrp\.com)", re.I)
+HOTCRP_DL = re.compile(
+    r"(?P<kind>registration|submission|abstract|title|paper)\s+deadline\s*:?\s*"
+    r"(?:(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*,?\s+)?"
+    r"(?P<mon>Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|"
+    r"Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+"
+    r"(?P<day>\d{1,2}),?\s+(?P<year>\d{4})"
+    r"(?:,?\s+(?P<h>\d{1,2}):(?P<mi>\d{2})(?::(?P<s>\d{2}))?\s*(?P<ap>[AaPp]\.?[Mm]\.?)?"
+    r"\s*(?P<tz>[A-Za-z]{2,5})?)?", re.I)
+KNOWN_TZ = set(FIXED_OFFSETS) | set(NAMED_ZONES) | {"AOE"}
+
+
+def hotcrp_deadline_urls(html):
+    seen, urls = set(), []
+    for m in HOTCRP_LINK.finditer(html or ""):
+        host = m.group(1).lower()
+        if host not in seen:
+            seen.add(host)
+            urls.append(f"https://{host}/deadlines")
+    return urls
+
+
+def parse_hotcrp_deadlines(html, today):
+    """Parse a HotCRP /deadlines page. A deadline that lands exactly on an AoE
+    day boundary is shown in AoE; otherwise it keeps the timezone HotCRP reports
+    (e.g. NSDI's 8:59 PM PDT). The exact instant is preserved either way."""
+    text = _page_text(html)
+    lo, hi = today - dt.timedelta(days=550), today + dt.timedelta(days=800)
+    seen, out = set(), []
+    for m in HOTCRP_DL.finditer(text):
+        mn = MONTH_NUM.get(m.group("mon").lower().rstrip("."))
+        tok = (m.group("tz") or "").upper()
+        if not mn or tok not in KNOWN_TZ:
+            continue
+        H = int(m.group("h")) if m.group("h") else 23
+        mi = int(m.group("mi")) if m.group("mi") else 59
+        s = int(m.group("s")) if m.group("s") else 59
+        ap = (m.group("ap") or "").replace(".", "").lower()
+        if ap == "pm" and H < 12:
+            H += 12
+        elif ap == "am" and H == 12:
+            H = 0
+        try:
+            local = dt.datetime(int(m.group("year")), mn, int(m.group("day")), H, mi, s)
+        except ValueError:
+            continue
+        aoe = _utc_to_local(_local_to_utc(local, tok), "AoE")
+        if aoe.hour == 23 and aoe.minute == 59:
+            disp_tz, d0 = "AoE", aoe
+        else:
+            disp_tz, d0 = tok, local
+        if not (lo <= d0.date() <= hi):
+            continue
+        label = "Abstract" if m.group("kind").lower() in ("registration", "abstract", "title") else "Paper"
+        key = (label, d0.strftime("%Y-%m-%d"))
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({"label": label, "datetime": d0.strftime("%Y-%m-%d %H:%M:%S"), "timezone": disp_tz})
+    return out
+
+
+def homepage_url(url):
+    if url.endswith("/call-for-papers"):
+        return url[: -len("/call-for-papers")]
+    if url.endswith("/cfp.html"):
+        return url[: -len("cfp.html")] + "index.html"
+    if url.endswith("/cfp/"):
+        return url[: -len("cfp/")]
+    if url.endswith("/cfp"):
+        return url[: -len("cfp")]
+    return None
+
+
 def fetch(url: str, timeout: int = 25):
     req = urllib.request.Request(url, headers={
         "User-Agent": "Mozilla/5.0 (compatible; sysconfdeadlines/1.0; +https://github.com/yulistic/sysconfdeadlines)"})
@@ -250,11 +467,11 @@ def url_for(template: str, year: int):
 
 
 def research_venue(name: str, meta: dict, today: dt.date, log: list):
-    """Return (year, link, deadlines) scraped from the live CFP, or None."""
+    """Return (year, link, deadlines, conf_date, place) from the live CFP, or None."""
     template = meta.get("url_template")
     if not template:
         return None
-    best = None  # (year, url, deadlines)
+    chosen = None  # (year, url, deadlines, html)
     for year in probe_years(today, meta.get("biennial_odd", False)):
         url = url_for(template, year)
         html = fetch(url)
@@ -267,10 +484,40 @@ def research_venue(name: str, meta: dict, today: dt.date, log: list):
         log.append(f"  {name}: {url} -> {len(deadlines)} deadline(s)"
                    f"{' (incl. upcoming)' if has_future else ' (all past)'}")
         if has_future:
-            return (year, url, deadlines)         # newest edition with an open deadline wins
-        if best is None:
-            best = (year, url, deadlines)          # remember newest live page as backup
-    return best
+            chosen = (year, url, deadlines, html)   # newest edition with an open deadline wins
+            break
+        if chosen is None:
+            chosen = (year, url, deadlines, html)   # remember newest live page as backup
+    if not chosen:
+        return None
+    year, url, deadlines, html = chosen
+
+    # Refine with authoritative, exact deadlines from HotCRP submission sites:
+    # seed-configured URLs (templated by year) plus any linked from the CFP.
+    hc_urls = [url_for(t, year) for t in (meta.get("hotcrp") or [])]
+    hc_urls += hotcrp_deadline_urls(html)
+    hc, fetched = {}, set()
+    for hurl in hc_urls:
+        if hurl in fetched:
+            continue
+        fetched.add(hurl)
+        hp = fetch(hurl)
+        if hp:
+            for d in parse_hotcrp_deadlines(hp, today):
+                hc[(d["label"], d["datetime"][:10])] = d
+    if hc:
+        merged = {(d["label"], d["datetime"][:10]): d for d in deadlines}
+        merged.update(hc)                       # HotCRP wins on the same (label, date)
+        deadlines = sorted(merged.values(), key=lambda d: d["datetime"])
+        log.append(f"    {name}: merged {len(hc)} HotCRP deadline(s) from {len(fetched)} site(s)")
+
+    home = homepage_url(url)
+    conf_date, place = extract_conf_info([fetch(home) if home else None, html], today)
+    if conf_date:
+        log.append(f"    {name}: conference dates -> {conf_date}")
+    if place:
+        log.append(f"    {name}: place -> {place}")
+    return (year, url, deadlines, conf_date, place)
 
 
 # ------------------------------------------------------------------- build ----
@@ -284,7 +531,8 @@ def build_card(name, full_name, tags, edition, place, date, link, tz, deadlines)
     return {
         "id": re.sub(r"[^a-z0-9]+", "-", f"{name}-{edition}".lower()).strip("-"),
         "conf": name, "edition": edition, "full_name": full_name, "tags": tags,
-        "place": place, "date": date, "link": link, "timezone": tz,
+        "place": place, "date": date, "link": link, "homepage": homepage_url(link) or link,
+        "timezone": tz,
         "deadlines": out_deadlines,
         "primary_utc": primary["utc"] if primary else None,
     }
@@ -298,14 +546,14 @@ def card_from_fallback(name, meta):
                       fb.get("deadlines", []))
 
 
-def card_from_scrape(name, meta, year, link, deadlines):
+def card_from_scrape(name, meta, year, link, deadlines, conf_date=None, place=None):
     fb = meta.get("fallback", {})
     same = (year == fb.get("year"))
     edition = fb.get("edition") if same else f"'{year % 100:02d}"
-    # Only trust the curated place/date when the scraped edition matches it;
-    # for a newer edition we don't yet know them, so show TBA rather than stale.
-    place = fb.get("place", "TBA") if same else "TBA"
-    date = fb.get("date", "TBA") if same else f"{year}"
+    # Prefer freshly scraped date/place; else the curated fallback (only when the
+    # edition matches); else TBA for a newer edition we don't yet have details for.
+    place = place or (fb.get("place", "TBA") if same else "TBA")
+    date = conf_date or (fb.get("date", "TBA") if same else f"{year}")
     return build_card(name, meta.get("full_name", name), meta.get("tags", []),
                       edition, place, date, link, meta.get("timezone", "AoE"), deadlines)
 
@@ -330,8 +578,8 @@ def main():
                 res = None
                 log.append(f"  {name}: ERROR {e}")
             if res:
-                year, link, deadlines = res
-                card = card_from_scrape(name, meta, year, link, deadlines)
+                year, link, deadlines, conf_date, place = res
+                card = card_from_scrape(name, meta, year, link, deadlines, conf_date, place)
         if card is None:
             card = card_from_fallback(name, meta)
             log.append(f"  {name}: using curated fallback")
@@ -405,6 +653,56 @@ def _selftest():
     want = [{"label": "Abstract", "datetime": "2025-12-04 17:59:00", "timezone": "EST"}]
     ok &= got == want
     print(f"  [{'ok ' if got == want else 'FAIL'}] abstract -> {got}")
+
+    # 5) conference date + place: pick the latest range (the conference), grab nearby place
+    ci = ("<p>The 25th USENIX Conference on File and Storage Technologies (FAST '27) "
+          "will take place February 23–25, 2027, at the Hyatt Regency Lake Washington "
+          "in Renton, WA, USA. Author response period August 29 – September 2, 2026.</p>")
+    gd, gp = extract_conf_info([ci], dt.date(2026, 6, 1))
+    good = (gd == "February 23-25, 2027" and gp == "Renton, WA, USA")
+    ok &= good
+    print(f"  [{'ok ' if good else 'FAIL'}] conf-info -> {gd} | {gp}")
+
+    ci2 = "<p>SOSP 2026 will be held September 29 – October 2, 2026 in Prague, Czechia.</p>"
+    gd2, gp2 = extract_conf_info([ci2], dt.date(2026, 6, 1))
+    good2 = (gd2 == "September 29 - October 2, 2026" and gp2 == "Prague, Czechia")
+    ok &= good2
+    print(f"  [{'ok ' if good2 else 'FAIL'}] conf-info2 -> {gd2} | {gp2}")
+
+    # venue name in front of the city must be stripped ("Hyatt Hotel, Shatin, Hong Kong")
+    ci3 = ("<h1>ATC 2026</h1><p>November 15-18, 2026 · Hyatt Hotel, Shatin, Hong Kong</p>"
+           "<h3>Where</h3><p>Hyatt Hotel, Shatin, Hong Kong</p>")
+    gd3, gp3 = extract_conf_info([ci3], dt.date(2026, 6, 1))
+    good3 = (gd3 == "November 15-18, 2026" and gp3 == "Shatin, Hong Kong")
+    ok &= good3
+    print(f"  [{'ok ' if good3 else 'FAIL'}] conf-info3 -> {gd3} | {gp3}")
+
+    # 6) HotCRP /deadlines: EDT times become the venue's AoE wall-clock
+    hc_html = ("<h3>Upcoming</h3>"
+               "<p>Registration deadline: Friday May 8, 2026, 7:59:59 AM EDT</p>"
+               "<p>Submission deadline: Friday May 15, 2026, 7:59:59 AM EDT</p>")
+    hc = parse_hotcrp_deadlines(hc_html, dt.date(2026, 1, 1))
+    want_hc = [
+        {"label": "Abstract", "datetime": "2026-05-07 23:59:59", "timezone": "AoE"},
+        {"label": "Paper", "datetime": "2026-05-14 23:59:59", "timezone": "AoE"},
+    ]
+    ok &= hc == want_hc
+    print(f"  [{'ok ' if hc == want_hc else 'FAIL'}] hotcrp(AoE) -> {hc}")
+
+    # NSDI-style: 8:59 PM PDT is NOT an AoE boundary, so keep PDT
+    nsdi_html = ("<p>Submission deadline: Thursday Apr 23, 2026, 8:59 PM PDT</p>"
+                 "<p>Registration deadline: Thursday Apr 16, 2026, 8:59 PM PDT</p>")
+    hcn = sorted(parse_hotcrp_deadlines(nsdi_html, dt.date(2026, 1, 1)), key=lambda d: d["datetime"])
+    want_n = [
+        {"label": "Abstract", "datetime": "2026-04-16 20:59:59", "timezone": "PDT"},
+        {"label": "Paper", "datetime": "2026-04-23 20:59:59", "timezone": "PDT"},
+    ]
+    ok &= hcn == want_n
+    print(f"  [{'ok ' if hcn == want_n else 'FAIL'}] hotcrp(PDT) -> {hcn}")
+    # ...and the submission-site URL is discovered from the CFP link
+    urls = hotcrp_deadline_urls('Submit at <a href="https://eurosys27-spring.hotcrp.com/">here</a>')
+    ok &= urls == ["https://eurosys27-spring.hotcrp.com/deadlines"]
+    print(f"  [{'ok ' if urls == ['https://eurosys27-spring.hotcrp.com/deadlines'] else 'FAIL'}] hotcrp-url -> {urls}")
 
     print("selftest:", "PASS" if ok else "FAILED")
     sys.exit(0 if ok else 1)

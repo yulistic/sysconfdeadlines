@@ -13,8 +13,8 @@
   <header class="site-header">
     <div class="header-row">
       <div class="title-block">
-        <h1>⏰ Systems Conference Deadlines</h1>
-        <p class="subtitle">Submission deadlines for top systems venues — counts down in <strong>AoE</strong> (Anywhere on Earth).</p>
+        <h1>Systems Conference Deadlines</h1>
+        <p class="subtitle">Submission deadlines for top systems venues.</p>
       </div>
       <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
     </div>
@@ -23,16 +23,30 @@
       <input id="search" type="search" class="search" placeholder="Search venue, location…" aria-label="Search conferences" autocomplete="off" />
       <div class="view-toggle" role="tablist" aria-label="Filter by time">
         <button class="seg active" data-view="upcoming" role="tab">Upcoming</button>
-        <button class="seg" data-view="past" role="tab">Past</button>
         <button class="seg" data-view="all" role="tab">All</button>
+      </div>
+      <div class="fmt-toggle" role="group" aria-label="Date format">
+        <button class="seg active" data-fmt="iso">2026-12-09</button>
+        <button class="seg" data-fmt="long">Dec 9, 2026</button>
       </div>
     </div>
     <div id="tag-bar" class="tag-bar" aria-label="Filter by topic"></div>
   </header>
 
   <main>
-    <div id="grid" class="grid" aria-live="polite"></div>
-    <p id="empty" class="empty" hidden>No conferences match your filters.</p>
+    <p id="tzinfo" class="list-info"></p>
+    <div class="table">
+      <div class="thead">
+        <span>Paper deadline</span>
+        <span>Conference</span>
+        <span>Location</span>
+        <span>Dates</span>
+        <span>Countdown</span>
+        <span></span>
+      </div>
+      <div id="list" aria-live="polite"></div>
+      <p id="empty" class="empty" hidden>No conferences match your filters.</p>
+    </div>
   </main>
 
   <footer class="site-footer">

@@ -5,10 +5,12 @@ systems venues — **SOSP, OSDI, ASPLOS, USENIX ATC, EuroSys, FAST, NSDI, HotOS,
 HotStorage** — and keeps itself up to date by **reading each venue's official
 Call for Papers** every week. No server, no database, no third-party data feed.
 
-- **Live countdowns** in AoE (Anywhere on Earth), also shown in your local time
-- **Upcoming / Past / All** toggle and **topic filter** (OS, Architecture, Storage, Networking)
-- **Search** by venue or location, **dark mode**
-- **Auto-updates weekly** via GitHub Actions — it scrapes the CFP pages directly
+- Compact **table** with a pinned column header; rows scroll beneath it
+- **Paper-submission deadline** as the focus, with a live AoE countdown; venues
+  with multiple cycles (ASPLOS, EuroSys, FAST, NSDI) show one row per cycle
+- **Upcoming / Past / All** toggle, **topic filter** (OS, Architecture, Storage, Networking), **search**, **dark mode**
+- **Auto-updates weekly** via GitHub Actions — reads each venue's HotCRP
+  `/deadlines` (authoritative) with the official CFP page as fallback
 
 ## How it works
 
@@ -28,10 +30,19 @@ Each week, for every venue, the updater:
    (`osdi26`→`osdi27`, `fast27`→`fast28`, `asplos2027`→`asplos2028`, …), so it
    fills the year into the venue's `url_template`, probes the next couple of
    years, and keeps the newest edition whose page is live.
-2. **Scrapes the deadlines** straight from that page — abstract / paper /
-   registration dates, with their time and timezone — and deliberately ignores
-   notification, camera-ready and the conference dates themselves.
+2. **Scrapes the submission deadlines** (abstract / paper / registration, with
+   time and timezone) and the **conference dates and location** (best-effort:
+   the latest multi-day date range on the page, plus a nearby "City, Country"),
+   while ignoring notification and camera-ready dates.
 3. **Converts to UTC** so the browser only counts down to an absolute instant.
+
+For the **precise** submission deadline it also reads the conference's
+**HotCRP `/deadlines`** page — the authoritative submission system, found from
+HotCRP links on the CFP and from per-venue URL templates in the seed. HotCRP
+values win where present; the CFP fills the rest (some editions, e.g. a
+just-announced OSDI '27, are on the CFP but not yet on HotCRP). Deadlines that
+fall exactly on an AoE day boundary are shown in AoE; others keep the timezone
+HotCRP reports (e.g. NSDI's 8:59 PM PDT).
 
 If a venue can't be fetched or yields nothing plausible, it keeps the curated
 `fallback` from the seed, so the site is **never overwritten with bad data**.
