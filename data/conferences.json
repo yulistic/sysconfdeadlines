@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-23T06:15:51Z",
+  "generated": "2026-06-23T12:50:17Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -9,44 +9,6 @@
     "Workshop"
   ],
   "conferences": [
-    {
-      "id": "asplos-26",
-      "conf": "ASPLOS",
-      "edition": "'26",
-      "full_name": "ACM Intl. Conference on Architectural Support for Programming Languages and Operating Systems",
-      "tags": [
-        "Architecture",
-        "OS"
-      ],
-      "place": "Pittsburgh, USA",
-      "date": "March 22-26, 2026",
-      "link": "https://www.asplos-conference.org/asplos2026/cfp/",
-      "homepage": "https://www.asplos-conference.org/asplos2026/",
-      "timezone": "AoE",
-      "deadlines": [
-        {
-          "label": "Abstract",
-          "utc": "2025-03-06T11:59:00Z",
-          "display": "Mar 5, 2025, 23:59 AoE"
-        },
-        {
-          "label": "Paper",
-          "utc": "2025-03-13T11:59:59Z",
-          "display": "Mar 12, 2025, 23:59 AoE"
-        },
-        {
-          "label": "Abstract",
-          "utc": "2025-08-14T11:59:59Z",
-          "display": "Aug 13, 2025, 23:59 AoE"
-        },
-        {
-          "label": "Paper",
-          "utc": "2025-08-21T11:59:59Z",
-          "display": "Aug 20, 2025, 23:59 AoE"
-        }
-      ],
-      "primary_utc": "2025-08-21T11:59:59Z"
-    },
     {
       "id": "eurosys-26",
       "conf": "EuroSys",
@@ -120,7 +82,7 @@
         "OS"
       ],
       "place": "Prague, Czechia",
-      "date": "September 29 - October 2, 2026",
+      "date": "Sept 29 - Oct 2, 2026",
       "link": "https://sigops.org/s/conferences/sosp/2026/cfp.html",
       "homepage": "https://sigops.org/s/conferences/sosp/2026/index.html",
       "timezone": "AoE",
@@ -153,7 +115,7 @@
       "timezone": "AoE",
       "deadlines": [
         {
-          "label": "Paper",
+          "label": "Submission",
           "utc": "2026-06-11T11:59:59Z",
           "display": "Jun 10, 2026, 23:59 AoE"
         }
