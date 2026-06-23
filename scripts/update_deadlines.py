@@ -136,8 +136,9 @@ DATE_RE = re.compile(
     r"(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\b", re.I)
 TIME_RE = re.compile(r"\b(\d{1,2}):(\d{2})\s*([ap]\.?m\.?)?", re.I)
 TZ_RE = re.compile(
-    r"\b(AoE|Anywhere on Earth|PST|PDT|EST|EDT|CST|CDT|MST|MDT|"
-    r"UTC[+-]\d{1,2}(?::\d{2})?|UTC|PT|ET)\b", re.I)
+    r"\b(AoE|Anywhere on Earth|Eastern|Pacific|Central|Mountain|"
+    r"PST|PDT|EST|EDT|CST|CDT|MST|MDT|"
+    r"UTC[+-]\d{1,2}(?::\d{2})?|UTC|PT|ET|CT|MT)\b", re.I)
 
 # A line is about a *submission* deadline only if it has a positive cue and no
 # negative cue (notification / camera-ready / the conference dates themselves).
@@ -189,7 +190,9 @@ def find_time_tz(context: str, default_tz: str):
     tzm = TZ_RE.search(context)
     if tzm:
         tok = tzm.group(1)
-        tz = "AoE" if tok.lower() in ("aoe", "anywhere on earth") else tok.upper()
+        WORD = {"aoe": "AoE", "anywhere on earth": "AoE", "eastern": "ET",
+                "pacific": "PT", "central": "CT", "mountain": "MT"}
+        tz = WORD.get(tok.lower(), tok.upper())
     return f"{hh:02d}:{mm:02d}:{ss:02d}", tz
 
 
@@ -670,6 +673,15 @@ def _selftest():
     want = [{"label": "Abstract", "datetime": "2025-12-04 17:59:00", "timezone": "EST"}]
     ok &= got == want
     print(f"  [{'ok ' if got == want else 'FAIL'}] abstract -> {got}")
+
+    # word-form timezone ("11:59pm Eastern") -> ET, and ET resolves to EDT in August
+    east = extract_deadlines("<p>Full paper submission — August 20, 2025 (11:59pm Eastern)</p>", "AoE", dt.date(2025, 1, 1))
+    wante = [{"label": "Paper", "datetime": "2025-08-20 23:59:00", "timezone": "ET"}]
+    ok &= east == wante
+    print(f"  [{'ok ' if east == wante else 'FAIL'}] eastern-word -> {east}")
+    iso_et, _ = to_utc("2025-08-20 23:59:00", "ET")
+    ok &= iso_et == "2025-08-21T03:59:00Z"
+    print(f"  [{'ok ' if iso_et == '2025-08-21T03:59:00Z' else 'FAIL'}] ET->UTC(EDT) -> {iso_et}")
 
     # 5) conference date + place: pick the latest range (the conference), grab nearby place
     ci = ("<p>The 25th USENIX Conference on File and Storage Technologies (FAST '27) "
