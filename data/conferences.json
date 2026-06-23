@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-23T05:13:00Z",
+  "generated": "2026-06-23T05:33:15Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -9,6 +9,119 @@
     "Workshop"
   ],
   "conferences": [
+    {
+      "id": "asplos-28",
+      "conf": "ASPLOS",
+      "edition": "'28",
+      "full_name": "ACM Intl. Conference on Architectural Support for Programming Languages and Operating Systems",
+      "tags": [
+        "Architecture",
+        "OS"
+      ],
+      "place": "Pittsburgh, USA",
+      "date": "March 22-26, 2026",
+      "link": "https://www.asplos-conference.org/asplos2028/cfp/",
+      "homepage": "https://www.asplos-conference.org/asplos2028/",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2025-03-06T11:59:00Z",
+          "display": "Mar 5, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-03-13T11:59:59Z",
+          "display": "Mar 12, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Abstract",
+          "utc": "2025-08-14T11:59:59Z",
+          "display": "Aug 13, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-08-21T11:59:59Z",
+          "display": "Aug 20, 2025, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2025-08-21T11:59:59Z"
+    },
+    {
+      "id": "asplos-26",
+      "conf": "ASPLOS",
+      "edition": "'26",
+      "full_name": "ACM Intl. Conference on Architectural Support for Programming Languages and Operating Systems",
+      "tags": [
+        "Architecture",
+        "OS"
+      ],
+      "place": "Pittsburgh, USA",
+      "date": "March 22-26, 2026",
+      "link": "https://www.asplos-conference.org/asplos2026/cfp/",
+      "homepage": "https://www.asplos-conference.org/asplos2026/",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2025-03-06T11:59:00Z",
+          "display": "Mar 5, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-03-13T11:59:59Z",
+          "display": "Mar 12, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Abstract",
+          "utc": "2025-08-14T11:59:59Z",
+          "display": "Aug 13, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-08-21T11:59:59Z",
+          "display": "Aug 20, 2025, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2025-08-21T11:59:59Z"
+    },
+    {
+      "id": "eurosys-26",
+      "conf": "EuroSys",
+      "edition": "'26",
+      "full_name": "European Conference on Computer Systems",
+      "tags": [
+        "OS"
+      ],
+      "place": "TBA",
+      "date": "2026",
+      "link": "https://2026.eurosys.org/cfp.html",
+      "homepage": "https://2026.eurosys.org/index.html",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2025-05-09T11:59:59Z",
+          "display": "May 8, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-05-16T11:59:59Z",
+          "display": "May 15, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Abstract",
+          "utc": "2025-09-19T11:59:59Z",
+          "display": "Sep 18, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-09-26T11:59:59Z",
+          "display": "Sep 25, 2025, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2025-09-26T11:59:59Z"
+    },
     {
       "id": "osdi-26",
       "conf": "OSDI",
