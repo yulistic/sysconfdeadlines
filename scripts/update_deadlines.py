@@ -509,12 +509,27 @@ def research_venue(name: str, meta: dict, today: dt.date, log: list):
 
         home = homepage_url(url)
         conf_date, place = extract_conf_info([fetch(home) if home else None, html], today)
+        # Some sites redirect a non-existent year path (e.g. asplos2028 -> asplos2026)
+        # to their current page; reject when the conference year != the probed year.
+        if conf_date:
+            cy = re.search(r"\d{4}", conf_date)
+            if cy and int(cy.group()) != year:
+                log.append(f"  {name} {year}: skipped (page resolves to {cy.group()})")
+                continue
         log.append(f"  {name} {year}: {len(deadlines)} deadline(s)"
                    + (f", merged {len(hc)} HotCRP" if hc else "")
                    + (f" -> {conf_date}" if conf_date else "")
                    + (f" @ {place}" if place else ""))
         editions.append((year, url, deadlines, conf_date, place))
-    return editions
+
+    # Drop duplicates from year-path redirects: for an identical deadline set,
+    # keep the lowest (i.e. the real) year.
+    by_sig = {}
+    for ed in editions:
+        sig = tuple(sorted(d["datetime"][:10] for d in ed[2]))
+        if sig not in by_sig or ed[0] < by_sig[sig][0]:
+            by_sig[sig] = ed
+    return list(by_sig.values())
 
 
 # ------------------------------------------------------------------- build ----
