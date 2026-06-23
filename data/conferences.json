@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-23T00:33:45Z",
+  "generated": "2026-06-23T05:13:00Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -20,6 +20,7 @@
       "place": "Seattle, WA, USA",
       "date": "July 13-15, 2026",
       "link": "https://www.usenix.org/conference/osdi26/call-for-papers",
+      "homepage": "https://www.usenix.org/conference/osdi26",
       "timezone": "EST",
       "deadlines": [
         {
@@ -46,6 +47,7 @@
       "place": "Prague, Czechia",
       "date": "Sept 29 - Oct 2, 2026",
       "link": "https://sigops.org/s/conferences/sosp/2026/cfp.html",
+      "homepage": "https://sigops.org/s/conferences/sosp/2026/index.html",
       "timezone": "AoE",
       "deadlines": [
         {
@@ -69,9 +71,10 @@
       "tags": [
         "OS"
       ],
-      "place": "TBA",
-      "date": "November 16-18, 2026",
+      "place": "Shatin, Hong Kong",
+      "date": "November 15-18, 2026",
       "link": "https://sigops.org/s/conferences/atc/2026/cfp.html",
+      "homepage": "https://sigops.org/s/conferences/atc/2026/index.html",
       "timezone": "AoE",
       "deadlines": [
         {
@@ -94,6 +97,7 @@
       "place": "Prague, Czechia",
       "date": "September 28-29, 2026",
       "link": "https://www.sigarch.org/call-contributions/hotstorage-sosp-2026/",
+      "homepage": "https://www.sigarch.org/call-contributions/hotstorage-sosp-2026/",
       "timezone": "AoE",
       "deadlines": [
         {
@@ -116,6 +120,7 @@
       "place": "Heraklion, Crete, Greece",
       "date": "April 11-15, 2027",
       "link": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "homepage": "https://www.asplos-conference.org/asplos2027/",
       "timezone": "AoE",
       "deadlines": [
         {
@@ -142,6 +147,7 @@
       "place": "Renton, WA, USA",
       "date": "February 23-25, 2027",
       "link": "https://www.usenix.org/conference/fast27/call-for-papers",
+      "homepage": "https://www.usenix.org/conference/fast27",
       "timezone": "AoE",
       "deadlines": [
         {
@@ -168,10 +174,16 @@
       "place": "Providence, RI, USA",
       "date": "May 11-13, 2027",
       "link": "https://www.usenix.org/conference/nsdi27/call-for-papers",
+      "homepage": "https://www.usenix.org/conference/nsdi27",
       "timezone": "AoE",
       "deadlines": [
         {
           "label": "Abstract",
+          "utc": "2026-04-17T11:59:59Z",
+          "display": "Apr 16, 2026, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
           "utc": "2026-04-24T11:59:59Z",
           "display": "Apr 23, 2026, 23:59 AoE"
         },
@@ -197,8 +209,9 @@
         "OS"
       ],
       "place": "Rabat, Morocco",
-      "date": "April 2027",
+      "date": "April 19-23, 2027",
       "link": "https://2027.eurosys.org/cfp.html",
+      "homepage": "https://2027.eurosys.org/index.html",
       "timezone": "AoE",
       "deadlines": [
         {
@@ -236,6 +249,7 @@
       "place": "Burghausen, Bavaria, Germany",
       "date": "May 24-26, 2027",
       "link": "https://sigops.org/s/conferences/hotos/2027/cfp.html",
+      "homepage": "https://sigops.org/s/conferences/hotos/2027/index.html",
       "timezone": "AoE",
       "deadlines": [
         {
