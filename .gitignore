@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+data/update_log.txt
+node_modules/

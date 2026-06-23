@@ -1,12 +1,12 @@
 name: Update deadlines
 
-# Periodically rebuild data/conferences.json from the curated seed + the
-# community-maintained ccfddl dataset, and commit it if anything changed.
-# GitHub Pages (deploy from the main branch) then re-publishes automatically.
+# Weekly: re-scrape each venue's official Call for Papers, rebuild
+# data/conferences.json, and commit it if anything changed. GitHub Pages
+# (deploy from the main branch) then re-publishes automatically.
 
 on:
   schedule:
-    - cron: "0 6 * * *"      # every day at 06:00 UTC
+    - cron: "0 6 * * 1"      # every Monday at 06:00 UTC
   workflow_dispatch: {}        # allow manual "Run workflow"
   push:
     paths:
