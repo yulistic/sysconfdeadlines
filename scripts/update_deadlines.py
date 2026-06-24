@@ -478,16 +478,19 @@ def url_for(template: str, year: int):
     return template.replace("{yyyy}", str(year)).replace("{yy}", f"{year % 100:02d}")
 
 
-def research_venue(name: str, meta: dict, today: dt.date, log: list):
+def research_venue(name: str, meta: dict, today: dt.date, log: list, skip_years=frozenset()):
     """Return a list of (year, link, deadlines, conf_date, place): the current
     edition plus any recent previous edition whose deadlines fall within the past
-    year. Empty list if nothing usable is found."""
+    year. Years in `skip_years` are already frozen (all past) and not re-fetched.
+    Empty list if nothing usable is found."""
     template = meta.get("url_template")
     if not template:
         return []
     cutoff = (today - dt.timedelta(days=365)).isoformat()
     editions = []
     for year in probe_years(today, meta.get("biennial_odd", False)):
+        if year in skip_years:                      # already captured & frozen (all past)
+            continue
         url = url_for(template, year)
         html = fetch(url)
         if not html:
@@ -544,7 +547,7 @@ def research_venue(name: str, meta: dict, today: dt.date, log: list):
 
 
 # ------------------------------------------------------------------- build ----
-def build_card(name, full_name, tags, edition, place, date, link, tz, deadlines):
+def build_card(name, full_name, tags, edition, place, date, link, tz, deadlines, year=None):
     out_deadlines = []
     for d in deadlines:
         iso, display = to_utc(d.get("datetime"), d.get("timezone", tz))
@@ -553,7 +556,7 @@ def build_card(name, full_name, tags, edition, place, date, link, tz, deadlines)
     primary = max(dated, key=lambda d: d["utc"]) if dated else None
     return {
         "id": re.sub(r"[^a-z0-9]+", "-", f"{name}-{edition}".lower()).strip("-"),
-        "conf": name, "edition": edition, "full_name": full_name, "tags": tags,
+        "conf": name, "edition": edition, "year": year, "full_name": full_name, "tags": tags,
         "place": place, "date": date, "link": link, "homepage": homepage_url(link) or link,
         "timezone": tz,
         "deadlines": out_deadlines,
@@ -566,7 +569,7 @@ def card_from_fallback(name, meta):
     return build_card(name, meta.get("full_name", name), meta.get("tags", []),
                       fb.get("edition", ""), fb.get("place", "TBA"), fb.get("date", "TBA"),
                       fb.get("link", "#"), fb.get("timezone", meta.get("timezone", "AoE")),
-                      fb.get("deadlines", []))
+                      fb.get("deadlines", []), year=fb.get("year"))
 
 
 def card_from_scrape(name, meta, year, link, deadlines, conf_date=None, place=None):
@@ -578,7 +581,7 @@ def card_from_scrape(name, meta, year, link, deadlines, conf_date=None, place=No
     place = place or (fb.get("place", "TBA") if same else "TBA")
     date = conf_date or (fb.get("date", "TBA") if same else f"{year}")
     return build_card(name, meta.get("full_name", name), meta.get("tags", []),
-                      edition, place, date, link, meta.get("timezone", "AoE"), deadlines)
+                      edition, place, date, link, meta.get("timezone", "AoE"), deadlines, year=year)
 
 
 def main():
@@ -589,35 +592,53 @@ def main():
     seed = yaml.safe_load(SEED.read_text(encoding="utf-8"))
     venues = seed.get("venues", {})
     today = dt.datetime.now(UTC).date()
-    log = [f"Run {dt.datetime.now(UTC).strftime('%Y-%m-%d %H:%M:%SZ')} (offline={args.offline})"]
+    now_iso = dt.datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    log = [f"Run {now_iso} (offline={args.offline})"]
 
-    cards = []
+    # Past editions don't change: reuse them from the last run instead of
+    # re-fetching or overwriting them every week.
+    old_payload = {}
+    if OUT.exists():
+        try:
+            old_payload = json.loads(OUT.read_text(encoding="utf-8"))
+        except Exception:
+            old_payload = {}
+    frozen = {}   # (conf, year) -> card, for editions whose deadlines have all passed
+    for c in old_payload.get("conferences", []):
+        if c.get("year") and c.get("primary_utc") and c["primary_utc"] < now_iso:
+            frozen[(c["conf"], c["year"])] = c
+
+    cards, seen_ids = [], set()
     for name, meta in venues.items():
-        venue_cards = []
+        skip = {y for (cf, y) in frozen if cf == name}
+        scraped = []
         if not args.offline:
             try:
-                for (year, link, deadlines, conf_date, place) in research_venue(name, meta, today, log):
-                    venue_cards.append(card_from_scrape(name, meta, year, link, deadlines, conf_date, place))
+                for (year, link, deadlines, conf_date, place) in research_venue(name, meta, today, log, skip):
+                    scraped.append(card_from_scrape(name, meta, year, link, deadlines, conf_date, place))
             except Exception as e:  # noqa: BLE001 - never let one venue break the run
                 log.append(f"  {name}: ERROR {e}")
-        if not venue_cards:
-            venue_cards = [card_from_fallback(name, meta)]
-            log.append(f"  {name}: using curated fallback")
-        cards.extend(venue_cards)
+        venue_cards = scraped + [card for (cf, y), card in frozen.items() if cf == name]
+        if not scraped:                              # no fresh current edition -> curated fallback
+            venue_cards.append(card_from_fallback(name, meta))
+            log.append(f"  {name}: curated fallback for current edition")
+        for card in venue_cards:                     # dedup (frozen reuse vs fallback)
+            if card["id"] not in seen_ids:
+                seen_ids.add(card["id"])
+                cards.append(card)
 
     cards.sort(key=lambda c: (c["primary_utc"] is None, c["primary_utc"] or ""))
     all_tags = sorted({t for c in cards for t in c["tags"]})
-    payload = {
-        "generated": dt.datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "source": "Scraped from official Call-for-Papers pages",
-        "tags": all_tags,
-        "conferences": cards,
-    }
+    generated = now_iso
+    if old_payload.get("conferences") == cards and old_payload.get("tags") == all_tags:
+        generated = old_payload.get("generated", now_iso)   # unchanged -> no spurious commit
+    payload = {"generated": generated, "source": "Scraped from official Call-for-Papers pages",
+               "tags": all_tags, "conferences": cards}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     LOG.write_text("\n".join(log) + "\n", encoding="utf-8")
-    print(f"Wrote {OUT.relative_to(ROOT)} with {len(cards)} venues "
-          f"({'offline/fallback' if args.offline else 'scraped CFPs'}).")
+    print(f"Wrote {OUT.relative_to(ROOT)} with {len(cards)} cards "
+          f"({'offline/fallback' if args.offline else 'scraped'}; {len(frozen)} frozen reused).")
     for line in log:
         print(line)
 
