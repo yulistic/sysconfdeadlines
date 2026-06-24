@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-23T12:50:17Z",
+  "generated": "2026-06-24T19:26:04Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -10,9 +10,49 @@
   ],
   "conferences": [
     {
+      "id": "asplos-26",
+      "conf": "ASPLOS",
+      "edition": "'26",
+      "year": 2026,
+      "full_name": "ACM Intl. Conference on Architectural Support for Programming Languages and Operating Systems",
+      "tags": [
+        "Architecture",
+        "OS"
+      ],
+      "place": "Pittsburgh, USA",
+      "date": "March 22-26, 2026",
+      "link": "https://www.asplos-conference.org/asplos2026/cfp/",
+      "homepage": "https://www.asplos-conference.org/asplos2026/",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2025-03-06T04:59:00Z",
+          "display": "Mar 5, 2025, 23:59 ET"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-03-13T11:59:59Z",
+          "display": "Mar 12, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Abstract",
+          "utc": "2025-08-14T11:59:59Z",
+          "display": "Aug 13, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-08-21T11:59:59Z",
+          "display": "Aug 20, 2025, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2025-08-21T11:59:59Z"
+    },
+    {
       "id": "eurosys-26",
       "conf": "EuroSys",
       "edition": "'26",
+      "year": 2026,
       "full_name": "European Conference on Computer Systems",
       "tags": [
         "OS"
@@ -50,6 +90,7 @@
       "id": "osdi-26",
       "conf": "OSDI",
       "edition": "'26",
+      "year": 2026,
       "full_name": "USENIX Symposium on Operating Systems Design and Implementation",
       "tags": [
         "OS"
@@ -77,12 +118,13 @@
       "id": "sosp-2026",
       "conf": "SOSP",
       "edition": "2026",
+      "year": 2026,
       "full_name": "ACM Symposium on Operating Systems Principles",
       "tags": [
         "OS"
       ],
       "place": "Prague, Czechia",
-      "date": "Sept 29 - Oct 2, 2026",
+      "date": "September 29 - October 2, 2026",
       "link": "https://sigops.org/s/conferences/sosp/2026/cfp.html",
       "homepage": "https://sigops.org/s/conferences/sosp/2026/index.html",
       "timezone": "AoE",
@@ -104,6 +146,7 @@
       "id": "usenix-atc-2026",
       "conf": "USENIX ATC",
       "edition": "2026",
+      "year": 2026,
       "full_name": "ACM SIGOPS Annual Technical Conference",
       "tags": [
         "OS"
@@ -115,7 +158,7 @@
       "timezone": "AoE",
       "deadlines": [
         {
-          "label": "Submission",
+          "label": "Paper",
           "utc": "2026-06-11T11:59:59Z",
           "display": "Jun 10, 2026, 23:59 AoE"
         }
@@ -126,6 +169,7 @@
       "id": "hotstorage-26",
       "conf": "HotStorage",
       "edition": "'26",
+      "year": 2026,
       "full_name": "ACM Workshop on Hot Topics in Storage and File Systems",
       "tags": [
         "Storage",
@@ -149,6 +193,7 @@
       "id": "asplos-27",
       "conf": "ASPLOS",
       "edition": "'27",
+      "year": 2027,
       "full_name": "ACM Intl. Conference on Architectural Support for Programming Languages and Operating Systems",
       "tags": [
         "Architecture",
@@ -177,6 +222,7 @@
       "id": "fast-27",
       "conf": "FAST",
       "edition": "'27",
+      "year": 2027,
       "full_name": "USENIX Conference on File and Storage Technologies",
       "tags": [
         "Storage"
@@ -204,6 +250,7 @@
       "id": "nsdi-27",
       "conf": "NSDI",
       "edition": "'27",
+      "year": 2027,
       "full_name": "USENIX Symposium on Networked Systems Design and Implementation",
       "tags": [
         "Networking"
@@ -241,6 +288,7 @@
       "id": "eurosys-27",
       "conf": "EuroSys",
       "edition": "'27",
+      "year": 2027,
       "full_name": "European Conference on Computer Systems",
       "tags": [
         "OS"
@@ -278,6 +326,7 @@
       "id": "hotos-2027",
       "conf": "HotOS",
       "edition": "2027",
+      "year": 2027,
       "full_name": "ACM SIGOPS Workshop on Hot Topics in Operating Systems",
       "tags": [
         "OS",
