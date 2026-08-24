@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-24T19:26:04Z",
+  "generated": "2026-08-24T15:02:20Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -47,6 +47,72 @@
         }
       ],
       "primary_utc": "2025-08-21T11:59:59Z"
+    },
+    {
+      "id": "fast-26",
+      "conf": "FAST",
+      "edition": "'26",
+      "year": 2026,
+      "full_name": "USENIX Conference on File and Storage Technologies",
+      "tags": [
+        "Storage"
+      ],
+      "place": "Santa Clara, CA, USA",
+      "date": "February 24-26, 2026",
+      "link": "https://www.usenix.org/conference/fast26/call-for-papers",
+      "homepage": "https://www.usenix.org/conference/fast26",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Paper",
+          "utc": "2025-03-19T11:59:59Z",
+          "display": "Mar 18, 2025, 23:59 AoE"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-09-17T11:59:59Z",
+          "display": "Sep 16, 2025, 23:59 AoE"
+        }
+      ],
+      "primary_utc": "2025-09-17T11:59:59Z"
+    },
+    {
+      "id": "nsdi-26",
+      "conf": "NSDI",
+      "edition": "'26",
+      "year": 2026,
+      "full_name": "USENIX Symposium on Networked Systems Design and Implementation",
+      "tags": [
+        "Networking"
+      ],
+      "place": "Renton, WA, USA",
+      "date": "May 4-6, 2026",
+      "link": "https://www.usenix.org/conference/nsdi26/call-for-papers",
+      "homepage": "https://www.usenix.org/conference/nsdi26",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2025-04-19T06:59:59Z",
+          "display": "Apr 18, 2025, 23:59 PDT"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-04-26T06:59:59Z",
+          "display": "Apr 25, 2025, 23:59 PDT"
+        },
+        {
+          "label": "Abstract",
+          "utc": "2025-09-12T06:59:59Z",
+          "display": "Sep 11, 2025, 23:59 PDT"
+        },
+        {
+          "label": "Paper",
+          "utc": "2025-09-19T06:59:59Z",
+          "display": "Sep 18, 2025, 23:59 PDT"
+        }
+      ],
+      "primary_utc": "2025-09-19T06:59:59Z"
     },
     {
       "id": "eurosys-26",
@@ -263,26 +329,26 @@
       "deadlines": [
         {
           "label": "Abstract",
-          "utc": "2026-04-17T11:59:59Z",
-          "display": "Apr 16, 2026, 23:59 AoE"
+          "utc": "2026-04-17T03:59:59Z",
+          "display": "Apr 16, 2026, 20:59 PDT"
         },
         {
           "label": "Paper",
-          "utc": "2026-04-24T11:59:59Z",
-          "display": "Apr 23, 2026, 23:59 AoE"
+          "utc": "2026-04-24T03:59:59Z",
+          "display": "Apr 23, 2026, 20:59 PDT"
         },
         {
           "label": "Abstract",
-          "utc": "2026-09-11T11:59:59Z",
-          "display": "Sep 10, 2026, 23:59 AoE"
+          "utc": "2026-09-11T03:59:00Z",
+          "display": "Sep 10, 2026, 23:59 EDT"
         },
         {
           "label": "Paper",
-          "utc": "2026-09-18T11:59:59Z",
-          "display": "Sep 17, 2026, 23:59 AoE"
+          "utc": "2026-09-18T03:59:00Z",
+          "display": "Sep 17, 2026, 23:59 EDT"
         }
       ],
-      "primary_utc": "2026-09-18T11:59:59Z"
+      "primary_utc": "2026-09-18T03:59:00Z"
     },
     {
       "id": "eurosys-27",
@@ -321,6 +387,34 @@
         }
       ],
       "primary_utc": "2026-09-25T11:59:59Z"
+    },
+    {
+      "id": "osdi-27",
+      "conf": "OSDI",
+      "edition": "'27",
+      "year": 2027,
+      "full_name": "USENIX Symposium on Operating Systems Design and Implementation",
+      "tags": [
+        "OS"
+      ],
+      "place": "Baltimore, MD, USA",
+      "date": "July 7-9, 2027",
+      "link": "https://www.usenix.org/conference/osdi27/call-for-papers",
+      "homepage": "https://www.usenix.org/conference/osdi27",
+      "timezone": "AoE",
+      "deadlines": [
+        {
+          "label": "Abstract",
+          "utc": "2026-12-01T22:59:00Z",
+          "display": "Dec 1, 2026, 17:59 EST"
+        },
+        {
+          "label": "Paper",
+          "utc": "2026-12-08T22:59:00Z",
+          "display": "Dec 8, 2026, 17:59 EST"
+        }
+      ],
+      "primary_utc": "2026-12-08T22:59:00Z"
     },
     {
       "id": "hotos-2027",

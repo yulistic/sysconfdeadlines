@@ -144,7 +144,7 @@ TZ_RE = re.compile(
 # negative cue (notification / camera-ready / the conference dates themselves).
 POS_ABSTRACT = ("abstract", "title", "registration")
 POS_PAPER = ("submission", "submit", "paper", "deadline", "due")
-NEG = ("notification", "notify", "camera", "accept", "reject", "rebuttal",
+NEG = ("notification", "notify", "camera", "final", "accept", "reject", "rebuttal",
        "response", "poster", "artifact", "review", "conference", "held",
        "will take place", "workshop date", "program", "presentation",
        "registration opens", "early bird", "travel", "venue")
@@ -219,8 +219,14 @@ def extract_deadlines(html: str, default_tz: str, today: dt.date):
                     raw.append((label, d, " ".join(cells)))
 
     # 2) Prose / bullet lists: any line with a date + a deadline cue.
-    text = soup.get_text("\n")
-    for line in (ln.strip() for ln in text.split("\n")):
+    #    Scan per block element first so a label and its date stay on one line
+    #    even when the date is wrapped in its own tag (USENIX:
+    #    "<li>Abstract registrations due: <strong>December 1, 2026</strong></li>"),
+    #    then fall back to raw text lines for pages without such structure.
+    lines = [el.get_text(" ", strip=True)
+             for el in soup.find_all(["li", "p", "dd", "dt", "h2", "h3", "h4", "h5", "h6"])]
+    lines += soup.get_text("\n").split("\n")
+    for line in (ln.strip() for ln in lines):
         if len(line) < 6 or len(line) > 400:
             continue
         if find_date(line):
