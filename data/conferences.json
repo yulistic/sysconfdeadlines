@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-24T15:02:20Z",
+  "generated": "2026-08-24T15:47:12Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -209,8 +209,8 @@
       "primary_utc": "2026-04-02T11:59:59Z"
     },
     {
-      "id": "usenix-atc-2026",
-      "conf": "USENIX ATC",
+      "id": "atc-2026",
+      "conf": "ATC",
       "edition": "2026",
       "year": 2026,
       "full_name": "ACM SIGOPS Annual Technical Conference",

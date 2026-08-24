@@ -67,7 +67,7 @@ venues:
         - { label: Paper, datetime: "2026-04-15 23:59:59" }
         - { label: Paper, datetime: "2026-09-09 23:59:59" }
 
-  USENIX ATC:
+  ATC:
     full_name: ACM SIGOPS Annual Technical Conference
     tags: [OS]
     url_template: "https://sigops.org/s/conferences/atc/{yyyy}/cfp.html"

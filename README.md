@@ -1,7 +1,7 @@
 # ⏰ Systems Conference Deadlines
 
 A tiny, static webpage that shows live submission-deadline countdowns for top
-systems venues — **SOSP, OSDI, ASPLOS, USENIX ATC, EuroSys, FAST, NSDI, HotOS,
+systems venues — **SOSP, OSDI, ASPLOS, ATC, EuroSys, FAST, NSDI, HotOS,
 HotStorage** — and keeps itself up to date by **reading each venue's official
 Call for Papers** every week. No server, no database, no third-party data feed.
 
