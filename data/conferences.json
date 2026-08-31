@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-24T15:47:12Z",
+  "generated": "2026-08-31T12:37:00Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -339,16 +339,16 @@
         },
         {
           "label": "Abstract",
-          "utc": "2026-09-11T03:59:00Z",
-          "display": "Sep 10, 2026, 23:59 EDT"
+          "utc": "2026-09-11T03:59:59Z",
+          "display": "Sep 10, 2026, 20:59 PDT"
         },
         {
           "label": "Paper",
-          "utc": "2026-09-18T03:59:00Z",
-          "display": "Sep 17, 2026, 23:59 EDT"
+          "utc": "2026-09-18T03:59:59Z",
+          "display": "Sep 17, 2026, 20:59 PDT"
         }
       ],
-      "primary_utc": "2026-09-18T03:59:00Z"
+      "primary_utc": "2026-09-18T03:59:59Z"
     },
     {
       "id": "eurosys-27",
