@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-31T12:37:00Z",
+  "generated": "2026-10-05T13:31:22Z",
   "source": "Scraped from official Call-for-Papers pages",
   "tags": [
     "Architecture",
@@ -434,11 +434,11 @@
       "deadlines": [
         {
           "label": "Paper",
-          "utc": null,
-          "display": "TBD"
+          "utc": "2027-02-02T11:59:59Z",
+          "display": "Feb 1, 2027, 23:59 AoE"
         }
       ],
-      "primary_utc": null
+      "primary_utc": "2027-02-02T11:59:59Z"
     }
   ]
 }
